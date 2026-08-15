@@ -1,29 +1,21 @@
 from fabricagent import find_empty_fields
 
 
-def test_nested_empty_values():
-    data = {
+def test_none_blank_and_empty_list():
+    value = {
         "InvoiceID": None,
-        "DueDate": "",
-        "Items": [
-            {"Product": None, "Quantity": 2},
-        ],
+        "DueDate": "   ",
+        "Items": [],
+        "TotalAmount": 0,
     }
-    assert find_empty_fields(data) == [
-        "InvoiceID",
-        "DueDate",
-        "Items[0].Product",
-    ]
+    assert find_empty_fields(value) == ["InvoiceID", "DueDate", "Items"]
 
 
-def test_empty_list_is_reported():
-    assert find_empty_fields({"Items": []}) == ["Items"]
+def test_nested_item_path():
+    value = {"Items": [{"Product": None, "Quantity": 1}]}
+    assert find_empty_fields(value) == ["Items[0].Product"]
 
 
-def test_populated_document_has_no_empty_fields():
-    data = {
-        "InvoiceID": "INV-001",
-        "TotalAmount": 100.0,
-        "Items": [{"Product": "Service", "Quantity": 1}],
-    }
-    assert find_empty_fields(data) == []
+def test_complete_value():
+    value = {"InvoiceID": "INV-001", "Items": [{"Product": "Service"}]}
+    assert find_empty_fields(value) == []

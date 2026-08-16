@@ -12,7 +12,7 @@ def get_pdfs(Url,path):
 
     for item in items:
         if item["type"] == "dir":
-            get_pdfs(Url,item["path"])
+            output.extend(get_pdfs(Url,item["path"]))
 
         elif item["type"] == "file" and item["name"].lower().endswith(".pdf"):
             output.append({

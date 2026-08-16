@@ -7,6 +7,7 @@ from notebookutils import mssparkutils
 from markitdown import MarkItDown
 from pyspark.sql import Row
 import uuid
+from pyspark.sql import SparkSession
 from pyspark.sql.types import (
     StructType, StructField, StringType, BooleanType, DateType
 )
@@ -102,6 +103,7 @@ def Markdown_file(SourceFolder,FileName,DocumentType,sourcePath,destinationPath,
             ExtractionDate=date.today()
         )
     )
+    spark = SparkSession.builder.getOrCreate()
    
     df = spark.createDataFrame(row, schema=schema)
 

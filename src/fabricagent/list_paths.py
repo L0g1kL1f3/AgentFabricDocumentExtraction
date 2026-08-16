@@ -1,5 +1,5 @@
 import requests
-
+from notebookutils import mssparkutils
 
 def get_pdfs(Url,path):
     output = []
@@ -20,5 +20,14 @@ def get_pdfs(Url,path):
                 "SourceFolder": f"Files/{path.split('/')[-1]}",
                 "FileName": item["name"]
             })
+
+    return output
+
+def get_item_list(path):
+
+    output=[]
+
+    for item in mssparkutils.fs.ls(path):
+        output.append(item.name)
 
     return output

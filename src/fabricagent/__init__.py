@@ -16,4 +16,4 @@ __all__ = [
     "find_incorrect_values"
 ]
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"

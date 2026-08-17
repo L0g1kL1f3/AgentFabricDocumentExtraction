@@ -36,7 +36,7 @@ def find_empty_fields(data, path=""):
 
     return empties, fullies
 
-def llm_data_extraction(row,client,Schema):
+def llm_data_extraction(row,client,Schema,DocumentType):
         response = client.complete(
             messages=[
             {"role": "user",

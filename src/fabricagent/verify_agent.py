@@ -1,5 +1,9 @@
 import re
 import json
+from pyspark.sql.types import (
+    StructType, StructField, StringType, BooleanType, DateType,IntegerType,DoubleType
+)
+
 
 def find_empty_fields(data, path=""):
     """
@@ -106,3 +110,55 @@ def find_incorrect_values(data, markdown):
     extract(data)
 
     return incorrect
+
+
+def split_json(document_data, document_id):
+    main_row = {"ID": document_id}
+    item_rows = []
+
+    for key, value in document_data.items():
+
+        if key == "Items":
+
+            if isinstance(value, list):
+                for item in value:
+
+                    row = {"ID": document_id}
+
+                    if isinstance(item, dict):
+                        row.update(item)
+
+                    item_rows.append(row)
+
+        else:
+            main_row[key] = value
+
+    return main_row, item_rows
+
+
+
+
+def get_spark_type(value):
+
+    if isinstance(value, int):
+        return IntegerType()
+
+    if isinstance(value, float):
+        return DoubleType()
+
+    if isinstance(value, bool):
+        return BooleanType()
+
+    return StringType()
+
+
+def build_schema(data):
+
+    return StructType([
+        StructField(
+            key,
+            get_spark_type(value),
+            True
+        )
+        for key, value in data.items()
+    ])
